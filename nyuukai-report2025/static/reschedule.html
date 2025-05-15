@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>予約日程変更</title>
+</head>
+<style>
+    body{ background-color:#91eda0;}
+
+</style>
+<body>
+    <label for="search_number">学籍番号を入力してください:</label>
+    <input type="text" id="search_number">
+    <button onclick="searchReservation()">検索</button>
+
+    <div id="reservationDetails" style="display: none;">
+        <h3>予約情報</h3>
+        <table id="reservationTable" border="1">
+            <thead>
+                <tr>
+                    <th>希望局</th>
+                    <th>日付</th>
+                    <th>時間</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <label for="choice">どの希望を変更しますか？:</label>
+        <select id="choice">
+            <option value="first">第一希望</option>
+            <option value="second">第二希望</option>
+            <option value="third">第三希望</option>
+        </select>
+
+        <label for="new_date">新しい日付:</label>
+        <input
+        type="date"
+        id="new_date"
+        name="first_date"
+        min="{{tomorrow}}"
+        max="{{max_date}}"
+        onchange="loadAvailableTimes()" 
+      />
+      
+
+        <label for="new_time">新しい時間:</label>
+        <select id="new_time">
+            <option value="">-- 時間を選択 --</option>
+          </select>
+          
+
+        <button onclick="updateReservation()">日程を変更</button>
+    </div>
+    <p>以下に局長のLINEのリンクを貼っているので、面談を希望した局の局長のLINEを各自追加して、学年と氏名送ってください</p>
+    <ul>
+    <li><a href='https://line.me/ti/p/g0XuikNNEX'>【外務局】三保谷悠</a></li>
+    <li><a href='https://line.me/ti/p/frD16phbMu'>【企画開発局】四宮結太郎</a></li>
+    <li><a href='https://line.me/ti/p/lLJo0Uri70'>【広報局長】滝本勇翔</a></li>
+    <li><a href='https://line.me/ti/p/1xmRRUJWEt'>【参加団体局】和久晃大</a></li>
+    <li><a href='https://line.me/ti/p/NCF6Kh-FQE'>【渉外局長】雪城大暉</a></li>
+    <li><a href='https://line.me/ti/p/R0RyhfVh_I'>【総務局】瀧澤日翔</a></li>
+    <li><a href='https://line.me/ti/p/BdGYn-2dh0'>【編集局】高地将太郎</a></li>
+    </ul>
+
+    <script>
+    async function searchReservation() {
+        const number = document.getElementById("search_number").value.trim();
+        if (!number) {
+            alert("学籍番号を入力してください");
+            return;
+        }
+        const response = await fetch(`/search_reservation?number=${number}`);
+        const data = await response.json();
+
+        const tableBody = document.querySelector("#reservationTable tbody");
+        tableBody.innerHTML = ""; // テーブルをリセット
+
+        if (data.reservations) {
+
+            data.reservations.forEach(reservation => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${reservation.choice_type}</td>
+                    <td>${reservation.department}</td>
+                    <td>${reservation.date}</td>
+                    <td>${reservation.time}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            document.getElementById("reservationDetails").style.display = "block";
+        } else {
+            alert("予約が見つかりませんでした");
+        }
+    }
+    async function updateReservation() {
+    const number = document.getElementById("search_number").value.trim();
+    const choice = document.getElementById("choice").value;
+    const newDate = document.getElementById("new_date").value;
+    const newTime = document.getElementById("new_time").value;
+
+    if (!number || !choice || !newDate || !newTime) {
+        alert("すべての項目を入力してください。");
+        return;
+    }
+
+    const confirmMsg = `${choice === "first" ? "第一希望" : choice === "second" ? "第二希望" : "第三希望"} を ${newDate} ${newTime} に変更します。よろしいですか？`;
+    if (!confirm(confirmMsg)) return;
+
+    const response = await fetch("/update_reservation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            number,
+            choice,
+            new_date: newDate,
+            new_time: newTime
+        })
+    });
+
+    const result = await response.json();
+
+    alert(result.message);
+
+    // 更新後に再読み込みして最新情報表示
+    if (result.message.includes("変更しました")) {
+        searchReservation();
+    }
+}
+
+async function loadAvailableTimes() {
+    const number = document.getElementById("search_number").value.trim();
+    const choice = document.getElementById("choice").value;
+    const date = document.getElementById("new_date").value;
+
+    if (!number || !choice || !date) return;
+
+    // どの局か取得
+    const response = await fetch(`/search_reservation?number=${number}`);
+    const data = await response.json();
+
+    if (!data.reservations) return;
+
+    const selected = data.reservations.find(r => r.choice_type.includes(choice === "first" ? "第一" : choice === "second" ? "第二" : "第三"));
+
+    if (!selected || !selected.department) return;
+
+    const department = selected.department;
+
+    // 空き時間取得
+    const timeResponse = await fetch(`/available_times?choice=${encodeURIComponent(department)}&date=${date}`);
+    const timeData = await timeResponse.json();
+
+    const timeSelect = document.getElementById("new_time");
+    timeSelect.innerHTML = "";
+
+    timeData.available_times.forEach(time => {
+        const option = document.createElement("option");
+        option.value = time;
+        option.textContent = `${time}〜`;
+        timeSelect.appendChild(option);
+    });
+
+    if (timeData.available_times.length === 0) {
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = "空き時間がありません";
+        timeSelect.appendChild(option);
+    }
+}
+    </script>
+
+</body>
+</html>

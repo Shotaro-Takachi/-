@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>局別 仕事スケジュール</title>
+  <style>
+    table, th, td { border: 1px solid #aaa; border-collapse: collapse; padding: 5px; }
+    button { margin: 5px; padding: 5px 10px; }
+    .hidden { display: none; }
+    #modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 20px; border: 1px solid #ccc; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1000; }
+    #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+    #timeFormWrapper {
+    max-height: 300px; /* 高さの上限を設定 */
+    overflow-y: scroll; /* スクロール可能にする */
+    border: 1px solid #ccc; /* 枠線を追加（任意） */
+    padding: 10px; /* 余白 */
+    background-color: #f9f9f9; /* 背景色（任意） */
+    }
+
+  </style>
+</head>
+<body>
+  <h2>局別 仕事スケジュール登録</h2>
+
+  <!-- ✅ 局別ボタン -->
+  <div id="departmentButtons">
+    <button onclick="openDepartment('外務局')">外務局</button>
+    <button onclick="openDepartment('企画開発局')">企画開発局</button>
+    <button onclick="openDepartment('広報局')">広報局</button>
+    <button onclick="openDepartment('参加団体局')">参加団体局</button>
+    <button onclick="openDepartment('渉外局')">渉外局</button>
+    <button onclick="openDepartment('総務局')">総務局</button>
+    <button onclick="openDepartment('編集局')">編集局</button>
+  </div>
+
+  <!-- ✅ 日程選択ボタン -->
+  <div id="dateSelection" class="hidden">
+    <h3 id="departmentTitle"></h3>
+    <p>日程を選んでください：</p>
+    <input
+      type="date"
+      id="selectedDate"
+      min="{{tomorrow}}"
+      max="{{max_date}}"
+    />
+    <button onclick="confirmDate()">日程確定</button>
+    
+  </div>
+
+  <!-- ✅ モーダル（時間選択画面） -->
+  <div id="overlay" class="hidden" onclick="closeModal()"></div>
+  <div id="modal" class="hidden">
+    <h3 id="modalTitle"></h3>
+    <p>以下の時間から選んでください：</p>
+    <div id="timeFormWrapper">
+    <form id="timeForm">
+      <label><input type="checkbox" name="time" value="08:30"> 08:30~</label><br>
+      <label><input type="checkbox" name="time" value="09:00"> 09:00~</label><br>
+      <label><input type="checkbox" name="time" value="09:30"> 09:30~</label><br>
+      <label><input type="checkbox" name="time" value="10:00"> 10:00~</label><br>
+      <label><input type="checkbox" name="time" value="10:30"> 10:30~</label><br>
+      <label><input type="checkbox" name="time" value="11:00"> 11:00~</label><br>
+      <label><input type="checkbox" name="time" value="11:30"> 11:30~</label><br>
+      <label><input type="checkbox" name="time" value="12:00"> 12:00~</label><br>
+      <label><input type="checkbox" name="time" value="12:30"> 12:30~</label><br>
+      <label><input type="checkbox" name="time" value="13:00"> 13:00~</label><br>
+      <label><input type="checkbox" name="time" value="13:30"> 13:30~</label><br>
+      <label><input type="checkbox" name="time" value="14:00"> 14:00~</label><br>
+      <label><input type="checkbox" name="time" value="14:30"> 14:30~</label><br>
+      <label><input type="checkbox" name="time" value="15:00"> 15:00~</label><br>
+      <label><input type="checkbox" name="time" value="15:30"> 15:30~</label><br>
+      <label><input type="checkbox" name="time" value="16:00"> 16:00~</label><br>
+      <label><input type="checkbox" name="time" value="16:30"> 16:30~</label><br>
+      <label><input type="checkbox" name="time" value="17:00"> 17:00~</label><br>
+      <label><input type="checkbox" name="time" value="17:30"> 17:30~</label><br>
+      <label><input type="checkbox" name="time" value="18:00"> 18:00~</label><br>
+      <label><input type="checkbox" name="time" value="18:30"> 18:30~</label><br>
+      <label><input type="checkbox" name="time" value="19:00"> 19:00~</label><br>
+      <label><input type="checkbox" name="time" value="19:30"> 19:30~</label><br>
+      <label><input type="checkbox" name="time" value="20:00"> 20:00~</label><br>
+      <label><input type="checkbox" name="time" value="20:30"> 20:30~</label><br>
+      <label><input type="checkbox" name="time" value="21:00"> 21:00~</label><br>
+      <label><input type="checkbox" name="time" value="21:30"> 21:30~</label><br>
+      <label><input type="checkbox" name="time" value="22:00"> 22:00~</label><br>
+      <label><input type="checkbox" name="time" value="22:30"> 22:30~</label><br>
+      <label><input type="checkbox" name="time" value="23:00"> 23:00~</label><br>
+      <button type="button" onclick="submitTimes()">時間を登録</button>
+    </form>
+    </div>
+  </div>
+
+  <script>
+    let selectedDepartment = "";
+    let selectedDate = "";
+
+    // ✅ 局選択
+    function openDepartment(department) {
+      selectedDepartment = department;
+      document.getElementById("departmentTitle").innerText = `${department} の日程を選んでください`;
+      document.getElementById("dateSelection").classList.remove("hidden");
+    }
+
+    // ✅ 日程選択
+    function selectDate(date) {
+      selectedDate = date;
+      document.getElementById("modalTitle").innerText = `${selectedDepartment} - ${date} の時間選択`;
+      openModal();
+    }
+
+    // ✅ モーダル開く
+    function openModal() {
+      document.getElementById("modal").classList.remove("hidden");
+      document.getElementById("overlay").classList.remove("hidden");
+    }
+
+    // ✅ モーダル閉じる
+    function closeModal() {
+      document.getElementById("modal").classList.add("hidden");
+      document.getElementById("overlay").classList.add("hidden");
+    }
+
+    // ✅ 日程確定関数
+    function confirmDate() {
+    const selectedDateInput = document.getElementById("selectedDate").value;
+
+    if (!selectedDateInput) {
+        alert("日程を選択してください！");
+        return;
+    }
+
+    // 日付を選んだ後、モーダルを開く
+    selectDate(selectedDateInput);
+    }
+
+
+    // ✅ 時間選択登録
+    async function submitTimes() {
+      const selectedTimes = [...document.querySelectorAll("#timeForm input[name='time']:checked")].map(el => el.value);
+      
+      if (selectedTimes.length === 0) {
+        alert("時間を選択してください！");
+        return;
+      }
+
+      const data = {
+        department: selectedDepartment,
+        date: selectedDate,
+        times: selectedTimes
+      };
+
+      const response = await fetch("/admin_register_work", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      alert(result.message);
+
+      closeModal();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>管理者予約一覧</title>
+  <style>
+    table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
+    input[type="text"], select { width: 90px; }
+  </style>
+</head>
+<body>
+  <h2>予約管理ページ</h2>
+  <h2>予約管理ページ</h2>
+  <label for="searchName">名前で検索：</label>
+  <input type="text" id="searchName" oninput="filterByName()" placeholder="例: 山田 太郎">
+  <table id="adminTable">
+    <thead>
+      <tr>
+        <th>ID</th><th>氏名</th><th>LINE名</th>
+        <th>第1希望局</th><th>日付</th><th>時間</th><th>形式</th>
+        <th>第2希望局</th><th>日付</th><th>時間</th><th>形式</th>
+        <th>第3希望局</th><th>日付</th><th>時間</th><th>形式</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function fetchReservations() {
+      const response = await fetch("/admin_reservations");
+      const data = await response.json();
+      const tbody = document.querySelector("#adminTable tbody");
+      tbody.innerHTML = "";
+
+      data.reservations.forEach(res => {
+        if (res.name === "仕事") return;
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${res.id}</td>
+          <td><input type="text" value="${res.name}" data-id="${res.id}" data-col="name"></td>
+          <td><input type="text" value="${res.line_name}" data-id="${res.id}" data-col="line_name"></td>
+
+          <td><input type="text" value="${res.first_choice}" data-id="${res.id}" data-col="first_choice"></td>
+          <td><input type="date" value="${res.first_date}" data-id="${res.id}" data-col="first_date"></td>
+          <td><input type="time" value="${res.first_time}" data-id="${res.id}" data-col="first_time"></td>
+          <td><input type="text" value="${res.first_method}" data-id="${res.id}" data-col="first_method"></td>
+
+          <td><input type="text" value="${res.second_choice}" data-id="${res.id}" data-col="second_choice"></td>
+          <td><input type="date" value="${res.second_date}" data-id="${res.id}" data-col="second_date"></td>
+          <td><input type="time" value="${res.second_time}" data-id="${res.id}" data-col="second_time"></td>
+          <td><input type="text" value="${res.second_method}" data-id="${res.id}" data-col="second_method"></td>
+
+          <td><input type="text" value="${res.third_choice}" data-id="${res.id}" data-col="third_choice"></td>
+          <td><input type="date" value="${res.third_date}" data-id="${res.id}" data-col="third_date"></td>
+          <td><input type="time" value="${res.third_time}" data-id="${res.id}" data-col="third_time"></td>
+          <td><input type="text" value="${res.third_method}" data-id="${res.id}" data-col="third_method"></td>
+
+          <td>
+            <button onclick="deleteReservation(${res.id})">削除</button>
+          </td>
+        `;
+
+        tbody.appendChild(row);
+      });
+
+      // 入力変更を監視
+      document.querySelectorAll("input").forEach(input => {
+        input.addEventListener("change", () => {
+          const id = input.dataset.id;
+          const col = input.dataset.col;
+          const val = input.value;
+          fetch("/admin_update", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, column: col, value: val })
+          })
+          .then(res => res.json())
+          .then(msg => alert(msg.message));
+        });
+      });
+    }
+
+    async function deleteReservation(id) {
+      if (!confirm("本当に削除しますか？")) return;
+
+      const formData = new FormData();
+      formData.append("id", id);
+      const res = await fetch("/admin_delete", {
+        method: "POST",
+        body: formData
+      });
+      const result = await res.json();
+      alert(result.message);
+      fetchReservations(); // 再読み込み
+    }
+
+    async function filterByName() {
+    const searchValue = document.getElementById("searchName").value.trim();
+    const rows = document.querySelectorAll("#adminTable tbody tr");
+
+    rows.forEach(row => {
+      const nameCell = row.querySelector("td:nth-child(2) input"); // 氏名のセル
+      const name = nameCell.value;
+      if (name.includes(searchValue)) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  }
+
+
+    window.onload = fetchReservations;
+  </script>
+</body>
+</html>

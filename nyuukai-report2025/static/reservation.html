@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>予約登録</title>
+  </head>
+  <style>
+    body{ background-color:#91eda0;}
+    .coment{
+        background-color:#f4f4f4;
+        backgrond-image:url("/static/images/所際前日準備.jpg");
+        border-radius:10px;
+        padding:10px;
+    }
+    .btn{
+      width: 100px;
+      height: 50px;
+      font-size: 20px;
+      background-color: #ff5555;
+    }
+  </style>
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const hopeFields = ["first", "second", "third"];
+  
+    // 各希望に対して初期化処理を設定
+    hopeFields.forEach(hope => {
+      const choiceSelect = document.querySelector(`select[name="${hope}_choice"]`);
+      const dateInput = document.querySelector(`input[name="${hope}_date"]`);
+      const timeSelect = document.querySelector(`select[name="${hope}_time"]`);
+  
+      // 日付・局の変更時に空き時間を取得して選択肢更新
+      function updateAvailableTimes() {
+        const choice = choiceSelect.value;
+        const date = dateInput.value;
+  
+        if (!choice || !date) return;
+  
+        fetch(`/available_times?choice=${encodeURIComponent(choice)}&date=${encodeURIComponent(date)}`)
+          .then(res => res.json())
+          .then(data => {
+            timeSelect.innerHTML = '<option value="">選択してください</option>';
+            data.available_times.forEach(time => {
+              const opt = document.createElement("option");
+              opt.value = time;
+              opt.textContent = `${time}〜`;
+              timeSelect.appendChild(opt);
+            });
+          });
+      }
+  
+      if (choiceSelect && dateInput) {
+        choiceSelect.addEventListener("change", updateAvailableTimes);
+        dateInput.addEventListener("change", updateAvailableTimes);
+      }
+    });
+  
+    // 希望局の重複選択を防止（第一〜第三で同じ局を選べない）
+    const allChoices = hopeFields.map(h => document.querySelector(`select[name="${h}_choice"]`));
+    function preventDuplicateChoices() {
+      const selected = allChoices.map(sel => sel.value).filter(v => v);
+      allChoices.forEach(current => {
+        Array.from(current.options).forEach(opt => {
+          if (opt.value && selected.includes(opt.value) && current.value !== opt.value) {
+            opt.disabled = true;
+          } else {
+            opt.disabled = false;
+          }
+        });
+      });
+    }
+  
+    allChoices.forEach(sel => sel.addEventListener("change", preventDuplicateChoices));
+    preventDuplicateChoices(); // 初期化時にも実行
+  });
+  </script>
+  
+  
+  
+  <body>
+    <div  class="coment">
+    <h1>🌸2025 春新歓入会フォーム🌸</h1>
+    <p>【お知らせ📢】<br/>大変お手数ですが、面談登録ができない場合は個人的に局長と日程調整を行なっていただけると幸いです。<br/>今年度からフォームの形式を変更しているためご迷惑をお掛けいたしますこと、ご理解、ご協力のほどよろしくお願いいたします🙇<br/><br/>こんにちは、今回は所祭への入会を考えてくださりありがとうございます💖<br/>
+    入会の前に皆さんが希望する局の局長さんと面談をしていただきます👨‍💻<br/><br/>
+    面談期間は4/1~5/12です！🗓️ご都合の良い日程、時間の記入をお願いします🙏<br/>
+    ⚠️なお、面談フォームの提出締め切りは5/10となってます！<br/>
+    またその際に希望する面談形式(対面orオンライン)についても回答お願いします。<br/>
+    皆さんとお会いできるのを楽しみにしています✨✨<br/><br/>
+    ※第1希望の局の局長との面談は必須、第2,3希望の局の局長との面談は任意です。<br/><br/>
+    なお局長の都合上、対面での面談の希望がオンラインに変更になる可能性がございます。
+    あらかじめご了承ください。<br/><br/>
+    このフォームについて分からないことがありましたら、所祭公式LINEの方までよろしくお願いします！<br/><br/>⭐️がついている項目は必須となります！(希望者のみ)は空欄でも大丈夫です！！</p>
+
+    </div>
+    <form method="POST" action="submit" accept-charset="UTF-8">
+      <p>⭐️氏名：<input type="text" name="name" required /></p>
+      <p>⭐️LINEの名前：<input type="text" name="line_name" required /></p>
+      <p>⭐️学年(半角数字)：<input type="text" name="grade" type="number" required /></p>
+      <p>⭐️学籍番号(半角英数)：<input type="text" name="number" pattern="^[a-zA-Z0-9]+$" required /></p>
+      <p>
+        ⭐️第一希望局:
+        <select name="first_choice" required>
+          <option value="" selected>選択してください</option>
+          <option value="外務局">外務局</option>
+          <option value="企画開発局">企画開発局</option>
+          <option value="広報局">広報局</option>
+          <option value="参加団体局">参加団体局</option>
+          <option value="渉外局">渉外局</option>
+          <option value="総務局">総務局</option>
+          <option value="編集局">編集局</option>
+        </select>
+      </p>
+      <p>
+        ⭐️第一希望局との面談希望日付：<input
+          type="date"
+          name="first_date"
+          min="{{tomorrow}}"
+          max="{{max_date}}"
+          required
+        />
+      </p>
+      <p>
+        ⭐️第一希望局との面談希望時間:
+        <select name="first_time" required>
+          <option value="" selected>選択してください</option>
+          <option value="08:30">08:30〜</option>
+          <option value="09:00">09:00〜</option>
+          <option value="09:30">09:30〜</option>
+          <option value="10:00">10:00〜</option>
+          <option value="10:30">10:30〜</option>
+          <option value="11:00">11:00〜</option>
+          <option value="11:30">11:30〜</option>
+          <option value="12:00">12:00〜</option>
+          <option value="12:30">12:30〜</option>
+          <option value="13:00">13:00〜</option>
+          <option value="13:30">13:30〜</option>
+          <option value="14:00">14:00〜</option>
+          <option value="14:30">14:30〜</option>
+          <option value="15:00">15:00〜</option>
+          <option value="15:30">15:30〜</option>
+          <option value="16:00">16:00〜</option>
+          <option value="16:30">16:30〜</option>
+          <option value="17:00">17:00〜</option>
+          <option value="17:30">17:30〜</option>
+          <option value="18:00">18:00〜</option>
+          <option value="18:30">18:30〜</option>
+          <option value="19:00">19:00〜</option>
+          <option value="19:30">19:30〜</option>
+          <option value="20:00">20:00〜</option>
+          <option value="20:30">20:30〜</option>
+          <option value="21:00">21:00〜</option>
+          <option value="21:30">21:30〜</option>
+          <option value="22:00">22:00〜</option>
+          <option value="22:30">22:30〜</option>
+          <option value="23:00">23:00〜</option>
+        </select>
+      </p>
+      <p>
+        ⭐️第一希望局の形式:
+        <select name="first_method" required>
+          <option value="" selected>選択してください</option>
+          <option value="対面">対面</option>
+          <option value="zoom">zoom</option>
+        </select>
+      </p>
+
+      <p>
+        ⭐️第二希望局:
+        <select name="second_choice" required>
+          <option value="" selected>選択してください</option>
+          <option value="外務局">外務局</option>
+          <option value="企画開発局">企画開発局</option>
+          <option value="広報局">広報局</option>
+          <option value="参加団体局">参加団体局</option>
+          <option value="渉外局">渉外局</option>
+          <option value="総務局">総務局</option>
+          <option value="編集局">編集局</option>
+        </select>
+      </p>
+      <p>
+        (希望者のみ)第二希望局との面談希望日付：<input
+          type="date"
+          name="second_date"
+          min="{{tomorrow}}"
+          max="{{max_date}}"
+        />
+      </p>
+      <p>
+        (希望者のみ)第二希望局との面談希望時間:
+        <select name="second_time">
+          <option value="" selected>選択してください</option>
+          <option value="08:30">08:30〜</option>
+          <option value="09:00">09:00〜</option>
+          <option value="09:30">09:30〜</option>
+          <option value="10:00">10:00〜</option>
+          <option value="10:30">10:30〜</option>
+          <option value="11:00">11:00〜</option>
+          <option value="11:30">11:30〜</option>
+          <option value="12:00">12:00〜</option>
+          <option value="12:30">12:30〜</option>
+          <option value="13:00">13:00〜</option>
+          <option value="13:30">13:30〜</option>
+          <option value="14:00">14:00〜</option>
+          <option value="14:30">14:30〜</option>
+          <option value="15:00">15:00〜</option>
+          <option value="15:30">15:30〜</option>
+          <option value="16:00">16:00〜</option>
+          <option value="16:30">16:30〜</option>
+          <option value="17:00">17:00〜</option>
+          <option value="17:30">17:30〜</option>
+          <option value="18:00">18:00〜</option>
+          <option value="18:30">18:30〜</option>
+          <option value="19:00">19:00〜</option>
+          <option value="19:30">19:30〜</option>
+          <option value="20:00">20:00〜</option>
+          <option value="20:30">20:30〜</option>
+          <option value="21:00">21:00〜</option>
+          <option value="21:30">21:30〜</option>
+          <option value="22:00">22:00〜</option>
+          <option value="22:30">22:30〜</option>
+          <option value="23:00">23:00〜</option>
+        </select>
+      </p>
+      <p>
+        (希望者のみ)第二局の希望形式:
+        <select name="second_method" >
+          <option value="" selected>選択してください</option>
+          <option value="対面">対面</option>
+          <option value="zoom">zoom</option>
+        </select>
+      </p>
+
+      <p>
+        ⭐️第三希望局:
+        <select name="third_choice" required>
+          <option value="" selected>選択してください</option>
+          <option value="外務局">外務局</option>
+          <option value="企画開発局">企画開発局</option>
+          <option value="広報局">広報局</option>
+          <option value="参加団体局">参加団体局</option>
+          <option value="渉外局">渉外局</option>
+          <option value="総務局">総務局</option>
+          <option value="編集局">編集局</option>
+        </select>
+      </p>
+      <p>
+        (希望者のみ)第三希望局との面談希望日付：<input
+          type="date"
+          name="third_date"
+          min="{{tomorrow}}"
+          max="{{max_date}}"
+        />
+      </p>
+      <p>
+        (希望者のみ)第三希望局との面談希望時間:
+        <select name="third_time">
+          <option value="" selected>選択してください</option>
+          <option value="08:30">08:30〜</option>
+          <option value="09:00">09:00〜</option>
+          <option value="09:30">09:30〜</option>
+          <option value="10:00">10:00〜</option>
+          <option value="10:30">10:30〜</option>
+          <option value="11:00">11:00〜</option>
+          <option value="11:30">11:30〜</option>
+          <option value="12:00">12:00〜</option>
+          <option value="12:30">12:30〜</option>
+          <option value="13:00">13:00〜</option>
+          <option value="13:30">13:30〜</option>
+          <option value="14:00">14:00〜</option>
+          <option value="14:30">14:30〜</option>
+          <option value="15:00">15:00〜</option>
+          <option value="15:30">15:30〜</option>
+          <option value="16:00">16:00〜</option>
+          <option value="16:30">16:30〜</option>
+          <option value="17:00">17:00〜</option>
+          <option value="17:30">17:30〜</option>
+          <option value="18:00">18:00〜</option>
+          <option value="18:30">18:30〜</option>
+          <option value="19:00">19:00〜</option>
+          <option value="19:30">19:30〜</option>
+          <option value="20:00">20:00〜</option>
+          <option value="20:30">20:30〜</option>
+          <option value="21:00">21:00〜</option>
+          <option value="21:30">21:30〜</option>
+          <option value="22:00">22:00〜</option>
+          <option value="22:30">22:30〜</option>
+          <option value="23:00">23:00〜</option>
+        </select>
+      </p>
+      <p>
+        (希望者のみ)第三希望局の形式:
+        <select name="third_method" >
+          <option value="" selected>選択してください</option>
+          <option value="対面">対面</option>
+          <option value="zoom">zoom</option>
+        </select>
+      </p>
+      <input type="submit" class="btn"/>
+      <a href="/reschedule_page">日程変更・確認、局長のLINE確認はコチラ</a>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>局別予約一覧（仕事以外）</title>
+    <style>
+        table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
+        select, input { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h2>局別予約一覧（仕事以外）</h2>
+
+    <!-- 局選択 -->
+    <label for="department">局を選択：</label>
+    <select id="department" onchange="loadFilteredReservations()">
+        <option value="">--選択してください--</option>
+        <option value="外務局">外務局</option>
+        <option value="企画開発局">企画開発局</option>
+        <option value="広報局">広報局</option>
+        <option value="参加団体局">参加団体局</option>
+        <option value="渉外局">渉外局</option>
+        <option value="総務局">総務局</option>
+        <option value="編集局">編集局</option>
+    </select>
+
+    <div id="tableArea"></div>
+
+    <script>
+        // 局別の予約データを取得
+        async function loadFilteredReservations() {
+            const department = document.getElementById("department").value;
+            if (!department) {
+                document.getElementById("tableArea").innerHTML = "<p>局を選択してください。</p>";
+                return;
+            }
+
+            const res = await fetch(`/filtered_sorted_reservations?department=${department}`);
+            const data = await res.json();
+
+            const tableArea = document.getElementById("tableArea");
+
+            if (data.sorted_reservations.length === 0) {
+                tableArea.innerHTML = "<p>選択した局の予約はありません。</p>";
+                return;
+            }
+
+            let html = `<table>
+                <thead>
+                    <tr>
+                        <th>氏名</th>
+                        <th>LINE名</th>
+                        <th>学年</th>
+                        <th>学籍番号</th>
+                        <th>局</th>
+                        <th>日付</th>
+                        <th>時間</th>
+                        <th>形式</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+                data.sorted_reservations.forEach(res => {
+                // 必須項目が欠けていたらスキップ
+                if (
+                    !res.name?.trim() ||
+                    !res.department?.trim() ||
+                    !res.date?.trim() ||
+                    !res.time?.trim()
+                ) return;
+
+                    html += `
+                        <tr>
+                            <td>${res.name}</td>
+                            <td>${res.line_name || ""}</td>
+                            <td>${res.grade || ""}</td>
+                            <td>${res.number || ""}</td>
+                            <td>${res.department}</td>
+                            <td>${res.date}</td>
+                            <td>${res.time}</td>
+                            <td>${res.method || ""}</td>
+                        </tr>
+                    `;
+                });
+
+
+            html += "</tbody></table>";
+            tableArea.innerHTML = html;
+        }
+
+        // 初期表示時の処理
+        window.onload = () => {
+            document.getElementById("tableArea").innerHTML = "<p>予約はありません。</p>";
+        };
+    </script>
+</body>
+</html>
