@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>参加型イベント @ グランエミオ ノースプラザ - 前月祭2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            background-color: #0b5914; /* メインカラーをボディ背景に */
+        }
+        .header-color-bg {
+            background-color: #FFF0F0; /* ヘッダーの背景色 */
+        }
+        .content-area-bg {
+            background-color: #FFF0F0; /* コンテンツエリアの背景色 */
+        }
+        .main-color-bg {
+            background-color: #0b5914;
+        }
+        .header-text-color {
+            color: #333;
+        }
+        .main-color-text {
+            color: #FFF0F0;
+        }
+        h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <header class="header-color-bg p-4 shadow-md rounded-b-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-2 md:mb-0">
+                <img src="./images/logo.png" alt="前月祭ロゴ" class="h-20 w-20 rounded-full object-cover mr-4">
+                <h1 class="text-3xl font-bold header-text-color">前月祭2025</h1>
+            </div>
+            <nav>
+                <a href="index.html" class="hover:underline text-lg header-text-color">トップページへ戻る</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto p-4 md:p-8">
+        <section class="content-area-bg p-6 rounded-lg shadow-lg text-center mb-12">
+            <h2 class="text-3xl font-bold mb-2">参加型イベント</h2>
+            <p class="text-xl text-gray-600">@ グランエミオ ノースプラザ</p>
+        </section>
+
+        <section class="content-area-bg p-6 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold mb-4 border-b-2 border-gray-300 pb-2">体験型コンテンツ</h2>
+            <p class="text-lg text-gray-700 mb-8">
+                グランエミオのノースプラザでは、お子さまから大人まで楽しめる体験型コンテンツを多数ご用意しています。ぜひご家族やお友達とご参加ください！
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
+                <div class="bg-white/50 p-4 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow">
+                    <img src="https://placehold.co/150x150/0b5914/ffffff?text=占い" alt="占いのアイコン" class="mx-auto mb-4 rounded-full border-4 border-white shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">占い企画</h3>
+                    <p class="text-gray-700">あなたの未来を占ってみませんか？</p>
+                </div>
+                <div class="bg-white/50 p-4 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow">
+                    <img src="https://placehold.co/150x150/0b5914/ffffff?text=脱出ゲーム" alt="脱出ゲームのアイコン" class="mx-auto mb-4 rounded-full border-4 border-white shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">脱出ゲーム企画</h3>
+                    <p class="text-gray-700">頭を使ってチャレンジ！謎を解いて脱出せよ！</p>
+                </div>
+                <div class="bg-white/50 p-4 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow">
+                    <img src="https://placehold.co/150x150/0b5914/ffffff?text=輪投げ" alt="輪投げのアイコン" class="mx-auto mb-4 rounded-full border-4 border-white shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">輪投げ</h3>
+                    <p class="text-gray-700">景品ゲットを目指して輪投げに挑戦！</p>
+                </div>
+                <!-- <div class="bg-white/50 p-4 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow">
+                    <img src="https://placehold.co/150x150/0b5914/ffffff?text=グッズ販売" alt="グッズ販売のアイコン" class="mx-auto mb-4 rounded-full border-4 border-white shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ころぼグッズ販売</h3>
+                    <p class="text-gray-700">前月祭限定のオリジナルグッズを販売します。</p>
+                </div> -->
+                <div class="bg-white/50 p-4 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow">
+                    <img src="https://placehold.co/150x150/0b5914/ffffff?text=フォトスポット" alt="フォトスポットのアイコン" class="mx-auto mb-4 rounded-full border-4 border-white shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">フォトスポット</h3>
+                    <p class="text-gray-700">思い出に残る一枚を！記念撮影にぴったりのスポット。</p>
+                </div>
+            </div>
+            <img src="https://placehold.co/1200x400/0b5914/ffffff?text=参加型イベントイメージ" alt="参加型イベントのイメージ画像" class="w-full h-auto rounded-lg shadow-md mt-4">
+        </section>
+    </main>
+
+    <footer class="main-color-bg text-white p-4 mt-8 rounded-t-lg">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 早稲田大学所沢キャンパス祭 前月祭実行委員会</p>
+        </div>
+    </footer>
+</body>
+</html>

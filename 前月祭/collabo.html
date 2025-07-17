@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コラボ出店＆体験講座 @ クラッシィ所沢 - 前月祭2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            background-color: #0b5914; /* メインカラーをボディ背景に */
+        }
+        .header-color-bg{
+            background-color: #FFF0F0; /* ヘッダーの背景色 */
+        }
+        .content-area-bg {
+            background-color: #FFF0F0; /* コンテンツエリアの背景色 */
+        }
+        .main-color-bg {
+            background-color: #0b5914;
+        }
+        .header-text-color {
+            color: #333;
+        }
+        .main-color-text {
+            color: #FFF0F0;
+        }
+        h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <header class="header-color-bg p-4 shadow-md rounded-b-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-2 md:mb-0">
+                <img src="./images/logo.png" alt="前月祭ロゴ" class="h-20 w-20 rounded-full object-cover mr-4">
+                <h1 class="text-3xl font-bold header-text-color">前月祭2025</h1>
+            </div>
+            <nav>
+                <a href="index.html" class="hover:underline text-lg header-text-color">トップページへ戻る</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto p-4 md:p-8">
+
+        <section class="content-area-bg p-6 rounded-lg shadow-lg text-center mb-12">
+            <h2 class="text-3xl font-bold mb-2">コラボ出店＆体験講座</h2>
+            <p class="text-xl text-gray-600">@ クラッシィ所沢</p>
+        </section>
+
+        <section class="content-area-bg p-6 rounded-lg shadow-lg mb-12">
+            <h2 class="text-3xl font-bold mb-4 border-b-2 border-gray-300 pb-2">フード＆ドリンク</h2>
+            <p class="text-lg text-gray-700 mb-6">
+                クラッシィ所沢では、美味しいフードとドリンクをご用意してお待ちしております。
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-3">特製レモンジュース</h3>
+                    <img src="https://placehold.co/400x200/0b5914/ffffff?text=レモンジュース" alt="特製レモンジュースの画像" class="w-full h-auto rounded-lg shadow-md mb-4">
+                    <p class="text-gray-700">早稲田大学とタミー食品がコラボした、爽やかな味わいの「特製レモンジュース」を販売。リフレッシュにぴったりです！</p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-3">フランクフルトなどの軽食</h3>
+                    <img src="https://placehold.co/400x200/0b5914/ffffff?text=フランクフルト" alt="フランクフルトの画像" class="w-full h-auto rounded-lg shadow-md mb-4">
+                    <p class="text-gray-700">小腹が空いた時に嬉しいフランクフルトなどの軽食も販売いたします。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-area-bg p-6 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold mb-4 border-b-2 border-gray-300 pb-2">体験講座</h2>
+            <p class="text-lg text-gray-700 mb-6">
+                貴重な体験ができる講座も開催します。この機会をお見逃しなく！
+            </p>
+            <div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">早稲田大学競走部による走り方講座</h3>
+                <img src="https://placehold.co/800x300/0b5914/ffffff?text=走り方講座イメージ" alt="走り方講座のイメージ画像" class="w-full h-auto rounded-lg shadow-md mb-4">
+                <p class="text-gray-700">
+                    箱根駅伝で第3位となった早稲田大学陸上部による「走り方講座」も開催。現役学生から直接指導が受けられる貴重な機会です。正しい走り方を学んで、運動能力アップを目指しましょう！
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-color-bg text-white p-4 mt-8 rounded-t-lg">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 早稲田大学所沢キャンパス祭 前月祭実行委員会</p>
+        </div>
+    </footer>
+</body>
+</html>

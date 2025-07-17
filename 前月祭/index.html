@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前月祭 - 早稲田大学所沢キャンパス祭</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            background-color: #0b5914; /* メインカラーをボディ背景に */
+        }
+        /* コンテンツエリアの背景色を白にすることで、緑の背景とのコントラストを出す */
+        .header-color-bg{
+            background-color: #FFF0F0; /* ヘッダーの背景色 */
+        }
+        .content-area-bg {
+            background-color: #FFF0F0; /* コンテンツエリアの背景色 */
+        }
+        .main-color-bg {
+            background-color: #0b5914;
+        }
+        /* ヘッダーのテキスト色を調整 */
+        .header-text-color {
+            color: #333; /* ヘッダー背景色に合う濃い色 */
+        }
+        /* メインカラー背景上のテキスト色 (ボタンなど) */
+        .main-color-text {
+            color: #FFF0F0;
+        }
+        /* メインカラー背景上のボーダー色 */
+        .main-color-border {
+            border-color: #FFF0F0;
+        }
+        /* h2のテキスト色はコンテンツエリアの背景色に合わせて調整 */
+        h2 {
+            color: #333; /* コンテンツエリアの背景が白なので、濃い色で視認性を確保 */
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="header-color-bg p-4 shadow-md rounded-b-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <!-- ロゴとタイトルをグループ化して左寄せ -->
+            <div class="flex items-center mb-2 md:mb-0">
+                <!-- ロゴのプレースホルダー画像 -->
+                <img src="./images/logo.png" alt="前月祭ロゴ" class="h-20 w-20 rounded-full object-cover mr-4">
+                <h1 class="text-3xl font-bold header-text-color">前月祭2025</h1>
+            </div>
+            <!-- ナビゲーションを右寄せ -->
+            <nav>
+                <ul class="flex flex-wrap justify-center md:justify-end space-x-4">
+                    <li><a href="#about" class="hover:underline text-lg header-text-color">前月祭とは</a></li>
+                    <li><a href="#events" class="hover:underline text-lg header-text-color">各企画</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto p-4 md:p-8">
+        <!-- Hero Section -->
+        <section class="content-area-bg p-6 rounded-lg shadow-lg text-center mb-12">
+            <!-- 前月祭のロゴ画像 -->
+            <img src="./images/小見出しを追加 (2).png" alt="前月祭のロゴ" class="w-full h-auto rounded-lg">
+            <p class="text-xl text-gray-700 leading-relaxed font-semibold">
+                早稲田大学所沢キャンパス祭実行委員では、前月祭としてエリア各所で楽しいイベントを開催いたします。
+            </p>
+        </section>
+
+        <!-- About Zengetsusai -->
+        <section id="about" class="mb-12 content-area-bg p-6 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold mb-4 border-b-2 border-gray-300 pb-2">前月祭の意義と目的</h2>
+            <div class="space-y-4 text-gray-700">
+                <p class="text-lg">
+                    前月祭は、以下の2つの大きな意義を持っています。
+                </p>
+                <ul class="list-disc list-inside text-lg space-y-2 pl-4">
+                    <li>とこ祭委員の意欲の増進と、とこ祭の周知</li>
+                    <li>地域の人とのつながりや交流、所沢を盛り上げること <span class="text-sm text-gray-500">(特にこちらは対外的に重要です)</span></li>
+                </ul>
+                <p class="text-lg">
+                    これらの意義に基づき、前月祭の目的は「早稲田大学所沢キャンパス祭を周知しその魅力を伝えるとともに、所沢市全体のさらなる活性化に貢献する」ことです。
+                </p>
+            </div>
+        </section>
+
+        <!-- Event Sections -->
+        <section id="events" class="mb-12">
+            <div class="content-area-bg p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">   
+            <h2 class="text-3xl font-bold text-center  border-b-2 border-gray-300 pb-1">各企画のご紹介</h2>
+            
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                <!-- ステージ企画 -->
+                <div class="content-area-bg p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-3">ステージ企画 @ エミテラス e-cube</h3>
+                    <p class="text-gray-700 mb-4">
+                        お笑い工房LUDO、早稲田大学落語研究会など、様々なサークルがパフォーマンスを披露します。西武鉄道と所沢市とのコラボグッズ販売もあります。
+                    </p>
+                    <a href="stage.html" class="inline-block main-color-bg text-white px-6 py-3 rounded-full font-semibold hover:bg-opacity-90 transition-colors duration-300">詳細を見る</a>
+                </div>
+
+                <!-- 参加型イベント -->
+             <div class="content-area-bg p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">   
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-3">参加型イベント @ グランエミオ ノースプラザ</h3>
+                    <p class="text-gray-700 mb-4">
+                        お子さまから大人まで楽しめる体験型コンテンツをご用意。輪投げ、占い、脱出ゲームなど盛りだくさんです。
+                    </p>
+                    <a href="interactive.html" class="inline-block main-color-bg text-white px-6 py-3 rounded-full font-semibold hover:bg-opacity-90 transition-colors duration-300">詳細を見る</a>
+                </div>
+
+                <!-- コラボ出店＆体験講座 -->
+                <div class="content-area-bg p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-3">コラボ出店＆体験講座 @ クラッシィ所沢</h3>
+                    <p class="text-gray-700 mb-4">
+                        早稲田大学とタミー食品コラボの特製レモンジュース販売や、箱根駅伝で活躍した陸上部による走り方講座も開催！
+                    </p>
+                    <a href="collabo.html" class="inline-block main-color-bg text-white px-6 py-3 rounded-full font-semibold hover:bg-opacity-90 transition-colors duration-300">詳細を見る</a>
+                </div>
+
+                <!-- その他の見どころ -->
+                <div class="content-area-bg p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-3">その他の見どころ</h3>
+                    <p class="text-gray-700 mb-4">
+                        宝探しイベント、早稲田大学「怪獣同盟」のグリーティング、所沢市の公式キャラクターも登場します！
+                    </p>
+                    <a href="others.html" class="inline-block main-color-bg text-white px-6 py-3 rounded-full font-semibold hover:bg-opacity-90 transition-colors duration-300">詳細を見る</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-color-bg text-white p-4 mt-8 rounded-t-lg">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 早稲田大学所沢キャンパス祭 前月祭実行委員会</p>
+        </div>
+    </footer>
+</body>
+</html>
